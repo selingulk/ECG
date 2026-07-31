@@ -1,0 +1,6 @@
+Augmentation_Method,torch_ecg_Class,Diagnostic_Risk_Level,Clinical_Impact,Preserves_Diagnostic_Labels
+BaselineWanderAugmenter,torch_ecg.augmenters.BaselineWanderAugmenter,Low,Risk: Obscures low-amplitude P-waves and small Q/S deflections; may cause false peak detections.,Yes
+RandomRenormalize,torch_ecg.augmenters.RandomRenormalize,HIGH,HIGH RISK: Rescales signal amplitude; alters voltage criteria for Left Ventricular Hypertrophy (Sokolow-Lyon index).,No
+RandomFlip,torch_ecg.augmenters.RandomFlip,HIGH,HIGH RISK: Inverts signal polarity (+/-); mimics dextrocardia or reversed lead placement.,No
+RandomMasking,torch_ecg.augmenters.RandomMasking,Moderate,Moderate Risk: Zeroes out signal segments; simulates electrode disconnection to test model robustness.,Yes
+CutMix,torch_ecg.augmenters.CutMix,HIGH,HIGH RISK: Slices and mixes segments from different signals; distorts beat continuity and rhythm.,No

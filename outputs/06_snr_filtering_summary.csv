@@ -1,0 +1,5 @@
+Target_SNR_dB,Actual_SNR_in_dB,Delta_SNR_BioSPPy_dB,Delta_SNR_physioKIT_dB,Delta_SNR_NeuroKit2_dB,Delta_SNR_SciPy_dB
+20.0,5.1,1.99,0.54,0.3,0.54
+10.0,4.36,2.48,1.07,0.7,1.07
+0.0,1.35,4.15,3.12,2.56,3.13
+-5.0,-0.38,4.23,3.65,3.13,3.66

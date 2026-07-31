@@ -1,0 +1,9 @@
+Preset_Name,Clinical_Description,Morphological_Signature,Is_Arrhythmia,Leads_Supported,Clinical_Validity_Note
+SR,Normal Sinus Rhythm,"Normal P-QRS-T complex, regular R-R intervals",No,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+AFIB,Atrial Fibrillation,"Irregular R-R intervals, chaotic baseline (no P-wave)",Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+ant_STEMI,Anterior ST-Elevation MI,Significant ST-segment elevation above baseline,Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+LAHB,Left Anterior Hemiblock,"Q1S3 pattern, left axis deviation alterations",Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+LPHB,Left Posterior Hemiblock,"S1Q3 pattern, right axis deviation alterations",Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+high_take_off,High Take-Off / Early Repolarization,Elevated J-point with concave ST elevation,Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+LBBB,Left Bundle Branch Block,"Widened QRS (>120 ms), notched R-wave, inverted T-wave",Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
+random_morphology,Randomized Parameters,Stochastic variation of wave amplitudes & intervals,Yes,Up to 12 leads,"Rule-based mathematical preset; suitable for AI pretraining, not clinical diagnosis."
