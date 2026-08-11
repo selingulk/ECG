@@ -1,0 +1,5 @@
+Seizure_Stage,Mean_HR_BPM,SDNN_ms,RMSSD_ms,EMG_Band_Power,Signal_Std,Detected_Peaks
+Interictal_Baseline,109.13,168.84,219.23,0.009403,0.5084,27
+Preictal_Transition,94.03,187.34,263.36,0.000959,0.4945,22
+Ictal_Seizure_Phase,91.01,157.62,244.53,0.001272,0.5274,22
+Postictal_Recovery,114.17,196.76,265.78,0.005719,0.5395,28

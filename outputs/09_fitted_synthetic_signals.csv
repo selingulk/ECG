@@ -1,0 +1,5 @@
+Seizure_Stage,Target_Mean_HR_BPM,Empirical_SDNN_ms,Fitted_hr_std_param,Fitted_noise_param,Synthetic_Signal_Samples,Boundary_Discontinuity_Aligned,Amplitude_Units,Pretraining_Suitability
+Interictal_Baseline,109.13,168.84,15.0,0.094,7500,True,Arbitrary Units (a.u.),Unevaluated
+Preictal_Transition,94.03,187.34,15.0,0.0096,7500,True,Arbitrary Units (a.u.),Unevaluated
+Ictal_Seizure_Phase,91.01,157.62,15.0,0.0127,7500,True,Arbitrary Units (a.u.),Unevaluated
+Postictal_Recovery,114.17,196.76,15.0,0.0572,7500,True,Arbitrary Units (a.u.),Unevaluated

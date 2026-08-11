@@ -1,0 +1,3 @@
+Library,Method,Description,Signal_Length,Detected_R_Peaks,Mean_RR_s,Achieved_HR_BPM,Signal_Std_au,Peak_Amplitude_au
+NeuroKit2,simple,Approximate cardiac cycles based on Daubechies wavelets,5000,10,0.9191,65.28,1.762,7.0265
+NeuroKit2,ecgsyn,McSharry et al. dynamic ECGSYN dynamic ODE model,5000,12,0.8215,73.04,0.2386,1.1976

@@ -1,0 +1,4 @@
+Model_Configuration,Training_Samples,Test_Sensitivity_%,Test_Precision_%,Test_F1_Score_%,Test_ROC_AUC_%
+Model A: Real Data Only (Baseline),160,100.0,100.0,100.0,100.0
+Model B: Real + Real-Fitted Synthetic (Exp 09),320,100.0,100.0,100.0,100.0
+Model C: Real + Augmented Signals,320,100.0,100.0,100.0,100.0

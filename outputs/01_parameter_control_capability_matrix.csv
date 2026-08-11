@@ -1,0 +1,8 @@
+Parameter,NeuroKit2 control,physioKIT control,Directly comparable,Important limitation
+Heart rate,heart_rate,heart_rate,Yes,Achieved HR must be measured and verified
+HRV generation,heart_rate_std,Unsupported,No,Direct HRV generation control is not exposed through the tested physioKIT high-level synthesis API
+Noise,noise,noise_multiplier,Partially,Numeric scales are not equivalent; physioKIT lacks random-state seed control
+Sampling rate,sampling_rate,sample_rate,Yes,Morphology and amplitude scales remain library-specific
+Duration,duration,signal_length,Yes,Interfaces differ (duration in seconds vs signal_length in samples)
+Simulation method,"simple, ecgsyn",No direct equivalent,No,NeuroKit2-specific comparison; physioKIT uses preset-based BRISK synthesis
+Pathological presets,Not part of this experiment,EcgPreset,No,Covered separately in Experiment 02

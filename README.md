@@ -1,6 +1,6 @@
 # Evaluation of Python Toolkits for ECG Simulation, Processing and Augmentation
 
-A comprehensive benchmark evaluating six Python toolkits (**NeuroKit2, physioKIT, torch_ecg, BioSPPy, WFDB, SciPy**) for ECG generation, parameter control, arrhythmia synthesis, signal augmentation, and preprocessing.
+A comprehensive benchmark evaluating six Python toolkits (**NeuroKit2, physioKIT, torch_ecg, BioSPPy, WFDB, SciPy**) for ECG generation, parameter control, ECG abnormality synthesis, signal augmentation, and preprocessing.
 
 ---
 
@@ -9,18 +9,18 @@ A comprehensive benchmark evaluating six Python toolkits (**NeuroKit2, physioKIT
 To evaluate each toolkit transparently, suitabilities are scored against a defined 100-point rubric:
 - **ECG Generation & Simulation (25%):** Native ability to generate synthetic multi-beat ECG signals.
 - **Parameter Control & Sweeps (20%):** Fine-grained control over HR, HRV, noise, sampling rate, and morphology.
-- **Arrhythmia & Pathological Presets (20%):** Native support for generating pathological rhythms (AFIB, STEMI, LBBB).
+- **Arrhythmia & Pathological Presets (20%):** Native support for generating pathological rhythms and ECG abnormalities (AFIB, STEMI, LBBB).
 - **Signal Augmentation Capabilities (15%):** Dedicated pipeline transformations (scaling, cropping, noise, lead masking).
 - **Multi-lead & Scalability Support (10%):** Ability to process/generate multi-channel ECG data.
 - **Usability & Documentation (10%):** API cleanliness, standard output structures, and documentation quality.
 
 ### Composite Scorecard
 
-| Toolkit | Generation (25) | Parameter Control (20) | Arrhythmia Presets (20) | Augmentation (15) | Multi-lead (10) | Usability (10) | Total Score / 100 | Primary Project Role |
+| Toolkit | Generation (25) | Parameter Control (20) | Pathological Presets (20) | Augmentation (15) | Multi-lead (10) | Usability (10) | Total Score / 100 | Primary Project Role |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
 | **NeuroKit2** | 24 | 19 | 10 | 12 | 7 | 9 | **81 / 100** | **Primary Parametric ECG & HRV Generator** |
 | **torch_ecg** | 5 | 8 | 5 | 15 | 9 | 8 | **50 / 100** | **Deep Learning ECG Augmentation Library** |
-| **physioKIT** | 20 | 11 | 18 | 6 | 9 | 8 | **72 / 100** | **Pathological Arrhythmia Preset Generator** |
+| **physioKIT** | 20 | 11 | 18 | 6 | 9 | 8 | **72 / 100** | **Pathological ECG Abnormality & Preset Generator** |
 | **BioSPPy** | 0 | 0 | 0 | 4 | 5 | 8 | **17 / 100** | **Signal Preprocessing & Template Extraction** |
 | **WFDB** | 0 | 0 | 0 | 0 | 9 | 9 | **18 / 100** | **PhysioNet Dataset I/O & Ground Truth Reader** |
 | **SciPy** | 0 | 5 | 0 | 5 | 5 | 7 | **22 / 100** | **Low-level DSP Primitive Engine** |
@@ -33,15 +33,17 @@ To evaluate each toolkit transparently, suitabilities are scored against a defin
    - **NeuroKit2** provides the most flexible continuous parametric simulation (`nk.ecg_simulate`), allowing smooth control over mean heart rate, HRV (`heart_rate_std`), noise, and sampling rate.
    - **physioKIT** provides the richest suite of rule-based pathological presets (8 presets including AFIB, STEMI, LBBB).
    - **BioSPPy, WFDB, and SciPy** contain zero signal synthesis APIs.
-2. **Arrhythmic Generation vs. Real Recordings:**
-   - **physioKIT** generates rule-based mathematical waveforms for AFIB, STEMI, LBBB, and LAHB. These are suitable for ML pretraining but are not clinically validated patient recordings.
+2. **Arrhythmic Generation vs. ECG Abnormalities & Real Recordings:**
+   - **physioKIT** generates rule-based mathematical waveforms for Atrial Fibrillation (an arrhythmia) and STEMI, LBBB, LAHB/LPHB, and Early Repolarization (distinct structural, conduction, and repolarization ECG abnormalities rather than arrhythmias).
+   - **Pretraining Evaluation Disclaimer:** These generated signals are proof-of-concept models; their suitability for model pretraining should not be assumed until rigorously evaluated using real clinical data and downstream diagnostic model architectures.
    - **NeuroKit2** generates sinus rhythm with respiratory sinus arrhythmia (HRV noise); it does not natively synthesize named pathological arrhythmias.
-   - **WFDB** reads real clinical arrhythmia recordings (e.g., MIT-BIH Record 106 containing PVCs), which represent actual physiological pathology.
-3. **Signal Augmentation & Clinical Risks (`torch_ecg` Native Augmenters):**
-   - **`RandomRenormalize` (Amplitude Scaling):** Rescaling signal amplitude poses a **HIGH CLINICAL RISK** of altering voltage criteria for Left Ventricular Hypertrophy (Sokolow-Lyon index).
-   - **`CutMix` / `StretchCompressOffline` (Time Stretching / Segment Mixing):** Distorting temporal duration or slicing segments poses a **HIGH CLINICAL RISK** of artificially modifying QRS duration and QT intervals, mimicking bundle branch blocks or Long QT Syndrome.
-   - **`RandomFlip` (Signal Inversion):** Reversing polarity mimics dextrocardia or inverted electrode placement.
-   - **`RandomMasking` (Lead Masking / Dropout):** Zeroing out channels tests AI model robustness against electrode failure.
+   - **WFDB** reads real clinical arrhythmia recordings (e.g., MIT-BIH Record 106 containing PVCs), representing actual physiological pathology.
+3. **Signal Augmentation & Task-Dependent Diagnostic Risk (`torch_ecg` Native Augmenters):**
+   - **`BaselineWanderAugmenter`:** Low risk for R-peak/HR detection; High risk for ST-segment ischemia interpretation.
+   - **`RandomRenormalize` (Amplitude Scaling):** Rescaling signal amplitude poses low risk for temporal timing, but a **HIGH CLINICAL RISK** of altering voltage criteria for Left Ventricular Hypertrophy (Sokolow-Lyon index).
+   - **`RandomFlip` (Signal Inversion):** Low risk for beat-to-beat interval spacing; High risk due to inverted P/T wave polarity mimicking lead reversal or dextrocardia.
+   - **`RandomMasking` (Lead Masking / Dropout):** Task-dependent risk; depends on whether masked windows obscure diagnostic P-waves or QRS complexes.
+   - **`CutMix` (Multi-Signal Batch Execution N=4):** Tested on a multi-signal batch of 4 distinct ECG signals (50, 70, 120, 150 BPM). Distorts global rhythm continuity (high risk for rhythm classification), but provides local feature perturbation for representation learning.
 
 ---
 
@@ -51,9 +53,9 @@ To evaluate each toolkit transparently, suitabilities are scored against a defin
 MAU/
 ├── Experiments/
 │   ├── 01_generation_parameter_sweeps.py     # NeuroKit2 & physioKIT systematic parameter sweeps
-│   ├── 02_physiokit_arrhythmia_presets.py    # Benchmark of all 8 physioKIT pathological presets
-│   ├── 03_dynamic_ictal_surge_simulation.py  # Proof-of-concept seizure simulation with explicit physiological disclaimers
-│   ├── 04_torch_ecg_augmentations.py        # Native torch_ecg.augmenters class transformations & risk audit
+│   ├── 02_physiokit_arrhythmia_presets.py    # Benchmark of physioKIT presets with corrected clinical terminology
+│   ├── 03_dynamic_ictal_surge_simulation.py  # Proof-of-concept seizure simulation with boundary discontinuity checks
+│   ├── 04_torch_ecg_augmentations.py        # Native torch_ecg multi-signal batch CutMix & task-dependent risk audit
 │   ├── 05_signal_acquisition_comparison.py   # Signal acquisition audit (strict 10s window)
 │   ├── 06_noise_filtering_snr_benchmark.py   # Quantitative SNR filtering (+20 dB to -5 dB)
 │   └── 07_qrs_detection_multi_record.py     # R-peak detection benchmark (10 MIT-BIH records, first 100s)
@@ -98,32 +100,43 @@ python Experiments/07_qrs_detection_multi_record.py
 
 ## Detailed Experimental Benchmark Results
 
-### Experiment 01: Generation Parameter Sweeps (NeuroKit2 & physioKIT)
+### Experiment 01: Systematic Generation Parameter Sweeps (NeuroKit2 & physioKIT)
 
-| Parameter Swept | Tested Values | Observed Visual & Morphological Effect |
-| :--- | :--- | :--- |
-| **Heart Rate (HR)** | 50, 70, 100, 150 BPM | Alters inter-beat R-R spacing without changing individual P-QRS-T wave durations. |
-| **HRV (`heart_rate_std`)** | 0, 5, 15, 30 | Modulates beat-to-beat interval variability (simulating respiratory sinus arrhythmia). |
-| **Noise (`noise`)** | 0.0, 0.01, 0.05, 0.10 | High noise obscures low-amplitude P and T waves, leaving only QRS peaks visible. |
-| **Sampling Rate ($f_s$)** | 100, 250, 500, 1000 Hz | Low sampling rate (100 Hz) causes time quantization and R-peak amplitude attenuation. |
-| **Simulation Method** | `"neurokit"` vs `"ecgsyn"` | `"neurokit"` uses wavelet synthesis; `"ecgsyn"` uses McSharry's dynamic 3D ODE model. |
+Objective: Rigorously compare synthetic ECG generation parameters (Heart Rate, HRV, Noise, Sampling Rate, Duration, Simulation Method) between **NeuroKit2** and **physioKIT**, conducting comparable parameter sweeps across both libraries wherever API capabilities permit.
 
-*Visual Output:* `outputs/01_generation_parameter_sweeps.png`
+| Parameter Swept | Tested Control Values | Observed Effect & Comparability Status | Important Limitation & Synthesis Capability Note |
+| :--- | :--- | :--- | :--- |
+| **Heart Rate (HR)** | 50, 70, 100, 150 BPM | **Directly Comparable:** Both libraries accurately alter inter-beat R-R spacing ($\text{Error} \le 0.14\text{ BPM}$). | Achieved HR must be measured ($60/\text{mean\_RR}$). R-peak detection remains stable at high HR. |
+| **HRV Control** | `heart_rate_std` = [0, 5, 15, 30] | **NeuroKit2 Specific:** Increasing `heart_rate_std` introduces greater beat-to-beat heart-rate variability in the synthetic signal. | **physioKIT Unsupported:** Direct HRV generation control is not exposed through physioKIT synthesis API (`pk.ecg.synthesize`). |
+| **Noise Level** | Nominal values [0.0, 0.01, 0.05, 0.10] | **Partially Comparable:** Increasing library-specific noise (`noise` vs `noise_multiplier`) progressively distorts low-amplitude waveform components. | Nominal noise parameters are library-specific and not numerically equivalent. physioKIT lacks seed control. |
+| **Sampling Rate ($f_s$)** | 100, 250, 500, 1000 Hz | **Directly Comparable:** Lower sampling rates reduce temporal resolution and may affect representation of rapid QRS changes in both libraries. | Amplitudes are arbitrary units ($\text{a.u.}$) and not comparable across toolkits. |
+| **Real Duration & Scalability** | 5, 10, 60 seconds | **Directly Comparable:** Total returned sample count scales linearly with duration ($\text{Samples} = \text{duration} \times f_s$) in both toolkits. | Interface styles differ (seconds vs sample length). Median generation runtimes differ by algorithm. |
+| **Simulation Method** | `"simple"` vs `"ecgsyn"` | **NeuroKit2 Specific:** `"simple"` uses Daubechies-wavelet approximation; `"ecgsyn"` uses McSharry's 3D dynamic ODE model. | physioKIT uses a different preset-based synthesis architecture (BRISK) and does not expose these method choices. |
+
+*Methodological & Scientific Disclaimers:*
+- **Arbitrary Units:** All generated amplitudes are arbitrary units ($\text{a.u.}$) and are never labeled as physical voltage ($\text{mV}$).
+- **No Clinical Realism:** No clinical realism, clinical validation, or downstream diagnostic suitability is claimed for synthetic signals.
+
+*Outputs & Summaries:*
+- Waveform & Summary Figures: `outputs/01a_heart_rate_comparison.png`, `outputs/01b_hrv_control.png`, `outputs/01c_noise_comparison.png`, `outputs/01d_sampling_rate_comparison.png`, `outputs/01e_duration_scalability.png`, `outputs/01f_neurokit_method_comparison.png`, `outputs/01_generation_parameter_sweeps.png`
+- Summary Tables: `outputs/01a_heart_rate_comparison_summary.csv`, `outputs/01b_hrv_control_summary.csv`, `outputs/01c_noise_comparison_summary.csv`, `outputs/01d_sampling_rate_summary.csv`, `outputs/01e_duration_scalability_summary.csv`, `outputs/01f_neurokit_method_summary.csv`, `outputs/01_parameter_control_capability_matrix.csv`
 
 ---
 
-### Experiment 02: physioKIT Pathological Arrhythmia Presets
+### Experiment 02: physioKIT Pathological Presets & Clinical Terminology Audit
 
-| Preset Name | Clinical Category | Key Morphological Signature | Arrhythmia Type | AI Pretraining Suitability |
+*Note on Clinical Terminology:* **AFIB** is a cardiac arrhythmia. **STEMI** (ischemic injury), **LBBB / LAHB / LPHB** (conduction block), and **early repolarization** (repolarization variant) are distinct types of ECG abnormalities rather than arrhythmias.
+
+| Preset Name | Clinical Classification | Key Morphological Signature | Is Arrhythmia? | Model Pretraining Suitability |
 | :--- | :--- | :--- | :---: | :---: |
-| **SR** | Normal Sinus Rhythm | Normal P-QRS-T complex, regular R-R intervals | No | High |
-| **AFIB** | Atrial Fibrillation | Irregular R-R intervals, absent P-waves | Yes | High |
-| **ant_STEMI** | Anterior ST-Elevation MI | Pronounced ST-segment elevation above baseline | Yes | High |
-| **LAHB** | Left Anterior Hemiblock | Left axis deviation alterations | Yes | Moderate |
-| **LPHB** | Left Posterior Hemiblock | Right axis deviation alterations | Yes | Moderate |
-| **high_take_off**| Early Repolarization | Elevated J-point with concave ST elevation | Yes | Moderate |
-| **LBBB** | Left Bundle Branch Block | Widened QRS (>120 ms), notched R-wave | Yes | High |
-| **random_morphology**| Stochastic Synthesis | Randomized wave amplitudes and durations | Variable | Moderate |
+| **SR** | Normal Sinus Rhythm | Normal P-QRS-T complex, regular R-R intervals | No (Baseline) | Unevaluated (Requires downstream validation) |
+| **AFIB** | Cardiac Arrhythmia | Irregular R-R intervals, absent P-waves | **Yes (Arrhythmia)** | Unevaluated (Requires downstream validation) |
+| **ant_STEMI** | Ischemic ECG Abnormality | Pronounced ST-segment elevation above baseline | No (Ischemia) | Unevaluated (Requires downstream validation) |
+| **LAHB** | Conduction ECG Abnormality | Left axis deviation alterations | No (Conduction) | Unevaluated (Requires downstream validation) |
+| **LPHB** | Conduction ECG Abnormality | Right axis deviation alterations | No (Conduction) | Unevaluated (Requires downstream validation) |
+| **high_take_off**| Repolarization ECG Abnormality | Elevated J-point with concave ST elevation | No (Repolarization) | Unevaluated (Requires downstream validation) |
+| **LBBB** | Conduction ECG Abnormality | Widened QRS (>120 ms), notched R-wave | No (Conduction) | Unevaluated (Requires downstream validation) |
+| **random_morphology**| Stochastic Waveform Synthesis | Randomized wave amplitudes and durations | Variable | Unevaluated (Requires downstream validation) |
 
 *Data & Visualisation:* `outputs/02_physiokit_presets_summary.csv`, `outputs/02_physiokit_arrhythmia_presets.png`
 
@@ -137,27 +150,27 @@ Demonstrates a continuous 60-second multi-stage simulation of an epileptic seizu
 3. **Tonic-Clonic Motor Seizure (25--40s):** Injection of high-frequency EMG muscle tremor noise ($20\text{--}200\text{ Hz}$).
 4. **Post-ictal Recovery (40--60s):** Deceleration back to 75 BPM.
 
-**Methodological Disclaimers & Clinical Limitations:**
-- **Model Nature:** Rule-based phenomenological synthetic proof-of-concept approximation for AI feature pre-training.
-- **Autonomic Coupling:** Uses a piecewise target HR ramp without autonomic neuro-cardiac feedback dynamics (sympathetic surge / vagal withdrawal kinetics).
-- **EMG Noise Model:** Filtered bandpass Gaussian noise ($20\text{--}200\text{ Hz}$), lacking biomechanical motor contraction dynamics.
-- **Clinical Validation:** Has not been validated against ambulatory long-term video-EEG/ECG clinical epilepsy cohorts.
+**Methodological Disclaimers & Implementation Protocol:**
+- **Proof-of-Concept Status:** Presented strictly as a rule-based phenomenological proof-of-concept model for initial software exploration.
+- **Amplitude Scale:** Signal amplitude is strictly reported in **arbitrary units ($\text{a.u.}$)** rather than physical voltage ($\text{mV}$).
+- **Boundary Discontinuity Checking:** Independently generated 1-second synthetic chunks are systematically checked for vertical step discontinuities and DC-offset aligned across chunk boundaries.
+- **Future Real-Data Parameter Estimation Requirement:** In future work, heart-rate dynamics, HRV parameters, wave morphology, and noise components must be estimated directly from real patient ECG recordings across interictal, preictal, ictal, and postictal phases.
 
 *Visual Output:* `outputs/03_dynamic_ictal_surge_simulation.png`
 
 ---
 
-### Experiment 04: Native `torch_ecg` Augmentation Audit & Clinical Risk Assessment
+### Experiment 04: Native `torch_ecg` Augmentation Audit & Task-Dependent Risk Assessment
 
-Evaluated directly via native `torch_ecg.augmenters` classes acting on PyTorch Tensors:
+Evaluated directly via native `torch_ecg.augmenters` classes acting on PyTorch Tensors. **CutMix** is evaluated using a multi-signal batch containing $N=4$ distinct ECG signals (50, 70, 120, 150 BPM) to demonstrate genuine inter-signal mixing.
 
-| Augmentation Method | NATIVE `torch_ecg` Class | Visual Transformation | Clinical Diagnostic Risk | Preserves Labels? |
-| :--- | :--- | :--- | :--- | :---: |
-| **Baseline Wander** | `torch_ecg.augmenters.BaselineWanderAugmenter` | Low-frequency sinusoidal + Gaussian noise | Obscures P/T waves; may cause false peak detections | Yes |
-| **Amplitude Scaling** | `torch_ecg.augmenters.RandomRenormalize` | Rescaling signal amplitude ($1.6\times$) | **HIGH RISK:** Alters LVH voltage criteria (Sokolow-Lyon) | **No** |
-| **Polarity Inversion** | `torch_ecg.augmenters.RandomFlip` | Polarity flip ($+ \rightarrow -$) | **HIGH RISK:** Inverts P/T waves; mimics lead reversal | **No** |
-| **Lead Masking** | `torch_ecg.augmenters.RandomMasking` | Zeroing signal segments | Moderate Risk: Simulates electrode disconnection | Yes |
-| **Segment Mixing** | `torch_ecg.augmenters.CutMix` | Slicing and mixing signal segments | **HIGH RISK:** Distorts beat continuity and rhythm | **No** |
+| Augmentation Method | NATIVE `torch_ecg` Class | Visual Transformation | Task-Dependent Clinical Diagnostic Risk | Task-Dependent Label Preservation |
+| :--- | :--- | :--- | :--- | :--- |
+| **Baseline Wander** | `torch_ecg.augmenters.BaselineWanderAugmenter` | Low-frequency sinusoidal + Gaussian noise | Low risk for HR detection; High risk for ST-elevation ischemic diagnosis | **Task Dependent** (Safe for HR/R-peaks; Unsafe for ST ischemia) |
+| **Amplitude Scaling** | `torch_ecg.augmenters.RandomRenormalize` | Rescaling signal amplitude ($1.6\times$) | Low risk for timing/rhythm; High risk for LVH voltage criteria (Sokolow-Lyon) | **Task Dependent** (Safe for timing; Unsafe for hypertrophy diagnosis) |
+| **Polarity Inversion** | `torch_ecg.augmenters.RandomFlip` | Polarity flip ($+ \rightarrow -$) | Low risk for HR/HRV timing; High risk due to inverted P/T waves mimicking lead reversal | **Task Dependent** (Safe for beat intervals; Unsafe for lead orientation) |
+| **Lead Masking** | `torch_ecg.augmenters.RandomMasking` | Zeroing signal segments | Risk depends on whether masked window overlaps diagnostic P-waves or QRS complexes | **Task Dependent** (Moderate risk; depends on masked segment) |
+| **Segment Mixing** | `torch_ecg.augmenters.CutMix` (Multi-Signal Batch N=4) | Slicing and mixing distinct ECG signals | Distorts beat continuity and global rhythm; useful for local feature representation | **Task Dependent** (Unsafe for rhythm classification; Safe for local pretraining) |
 
 *Data & Visualisation:* `outputs/04_augmentation_clinical_risk_audit.csv`, `outputs/04_torch_ecg_augmentations.png`
 
@@ -210,6 +223,81 @@ Evaluated under a common EC57-style protocol using a $\pm 150\text{ ms}$ matchin
 | **SciPy** | Pan-Tompkins DSP Cascade | 92.64 ± 10.01 | 100.00 ± 0.00 | 95.87 ± 5.86 | No |
 
 *Data & Visualisation:* `outputs/07_qrs_detection_summary.csv`, `outputs/07_qrs_detection_detailed_results.csv`, `outputs/07_qrs_detection_multi_record.png`
+
+---
+
+### Experiment 08: Real Seizure ECG Stage Parameter Extraction Pipeline
+
+Extracted empirical physiological features across 4 clinical seizure stages from real patient recordings:
+
+| Seizure Stage | Mean HR (BPM) | SDNN (ms) | RMSSD (ms) | EMG Band Power ($20\text{--}150\text{ Hz}$) | Signal Amplitude Std ($\text{a.u.}$) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Interictal Baseline** | 109.13 | 168.84 | 219.23 | 0.009403 | 0.5084 |
+| **Preictal Transition** | 94.03 | 187.34 | 263.36 | 0.000959 | 0.4945 |
+| **Ictal Seizure Phase** | 91.01 | 157.62 | 244.53 | 0.001272 | 0.5274 |
+| **Postictal Recovery** | 114.17 | 196.76 | 265.78 | 0.005719 | 0.5395 |
+
+*Data & Visualisation:* `outputs/08_empirical_seizure_parameters.csv`, `outputs/08_real_seizure_phases.png`
+
+---
+
+### Experiment 09: Empirical Real-Fitted Synthetic ECG Generation
+
+Fitted continuous NeuroKit2 synthetic parameters to empirical stage measurements with boundary step-discontinuity alignment across stage transitions:
+- Signal Length: $7,500\text{ samples}$ per phase ($15\text{s}$ at $500\text{ Hz}$).
+- Amplitude Labels: Strictly designated as **Arbitrary Units ($\text{a.u.}$)**.
+
+*Data & Visualisation:* `outputs/09_fitted_synthetic_signals.csv`, `outputs/09_empirical_synthetic_fitting.png`
+
+---
+
+### Experiment 10: Quantitative Real vs. Synthetic Feature Distance Metrics
+
+Evaluated statistical distribution discrepancy between real clinical recordings, NeuroKit2 synthetic signals, and `torch_ecg` augmented signals:
+
+| Seizure Stage | Comparison Pair | $W_1$ R-R Dist (s) | Spectral PSD MSE ($\text{a.u.}^2/\text{Hz}$)* | Morphological Euclidean Dist | Validation Status |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **Interictal Baseline** | Real vs. NK2 Synthetic | 0.0180 | $2.41 \times 10^{-5}$ | 4.0654 | High Distribution Match |
+| **Interictal Baseline** | Real vs. `torch_ecg` Augmented | 0.0005 | $1.12 \times 10^{-4}$ | 3.1374 | Task-Dependent Feature Noise |
+| **Preictal Transition** | Real vs. NK2 Synthetic | 0.0313 | $1.85 \times 10^{-5}$ | 2.8241 | High Distribution Match |
+| **Preictal Transition** | Real vs. `torch_ecg` Augmented | 0.0007 | $9.84 \times 10^{-5}$ | 3.1525 | Task-Dependent Feature Noise |
+| **Ictal Seizure Phase** | Real vs. NK2 Synthetic | 0.0211 | $3.02 \times 10^{-5}$ | 1.7719 | High Distribution Match |
+| **Ictal Seizure Phase** | Real vs. `torch_ecg` Augmented | 0.0008 | $1.05 \times 10^{-4}$ | 3.0055 | Task-Dependent Feature Noise |
+| **Postictal Recovery** | Real vs. NK2 Synthetic | 0.0128 | $1.98 \times 10^{-5}$ | 1.5026 | High Distribution Match |
+| **Postictal Recovery** | Real vs. `torch_ecg` Augmented | 0.0000 | $8.91 \times 10^{-5}$ | 3.0887 | Task-Dependent Feature Noise |
+
+*\*Note on PSD MSE Method & Precision:* Power Spectral Densities were estimated using Welch's method ($f_s = 500\text{ Hz}$, $N_{\text{fft}} = 256$, Hanning windowing, unnormalized spectrum density $\text{a.u.}^2/\text{Hz}$). Values are reported in scientific notation ($10^{-5}\text{--}10^{-4}\text{ a.u.}^2/\text{Hz}$) to reflect true numerical precision.
+
+*Data & Visualisation:* `outputs/10_quantitative_validation_metrics.csv`, `outputs/10_real_vs_synthetic_validation.png`
+
+---
+
+### Experiment 11: Downstream AI Seizure Detection Classifier Benchmark
+
+Evaluated downstream machine learning diagnostic performance (Random Forest) across 3 training cohort configurations:
+
+| Model Configuration | Training Samples ($N$) | Test Sensitivity (%) | Test Precision (%) | Test $F_1$-Score (%) | Test ROC-AUC (%) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Model A: Real Data Only (Baseline)** | 160 | 100.0 | 100.0 | 100.0 | 100.0 |
+| **Model B: Real + Real-Fitted Synthetic (Exp 09)** | 320 | 100.0 | 100.0 | 100.0 | 100.0 |
+| **Model C: Real + Torch-ECG Augmented Signals** | 320 | 100.0 | 100.0 | 100.0 | 100.0 |
+
+#### Scientific Takeaway & Evaluation Caveat:
+- **Test Set Ceiling & Leakage Note:** The 100% test scores across all configurations do **not** yet prove general utility or the absence of distribution collapse. Because the baseline real-only classifier already achieves 100%, the test set may be too small, relatively simple, or subject to intra-recording temporal autocorrelation (segment leakage).
+- **Nuanced Finding:** Empirically fitted synthetic ECG signals and task-safe augmentations doubled the training set size ($160 \rightarrow 320$ samples) without reducing performance on the current test set. However, a patient-independent evaluation is required to evaluate true out-of-distribution generalization.
+
+*Data & Visualisation:* `outputs/11_downstream_seizure_classifier_summary.csv`, `outputs/11_downstream_seizure_classifier_benchmark.png`
+
+---
+
+## Prioritization of Next Research Steps (Experiment 12 Proposal)
+
+Before exploring generative AI architectures (WaveGAN, Diffusion ECG models), the immediate priority is establishing a patient-independent evaluation framework (**Experiment 12: Patient-Independent Evaluation & Leakage Audit**):
+
+1. **Patient-Wise Splitting (`GroupKFold`):** Enforce strict subject-level holdout validation across multiple independent PhysioNet patients (e.g., Siena Scalp EEG/ECG, MIT-BIH records) to eliminate intra-session temporal correlation leakage.
+2. **Repeated Cross-Validation & Confidence Intervals:** Implement 5-fold cross-validation with 10 random seeds, reporting mean scores alongside 95% parametric/bootstrap confidence intervals.
+3. **Strict Data Leakage Controls:** Verify that all signal normalization, scaling, and feature extraction parameters are calculated exclusively within fold training sets before transforming test folds.
+4. **Class Imbalance & Hard Negative Mining:** Test classification sensitivity under severe class imbalance (rare ictal events vs. abundant interictal background) and subtle preictal transition boundaries.
 
 ---
 

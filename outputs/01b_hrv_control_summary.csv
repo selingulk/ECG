@@ -1,0 +1,6 @@
+Library,heart_rate_std_parameter,Tested_Duration_s,Status,Detected_R_Peaks,Mean_RR_s,SDNN_ms,Achieved_Mean_HR_BPM,Std_Inst_HR_BPM
+NeuroKit2,0,30,Success,36,0.8458,89.45,70.94,17.69
+NeuroKit2,5,30,Success,35,0.8471,113.42,70.83,20.22
+NeuroKit2,15,30,Success,35,0.8485,177.72,70.71,19.53
+NeuroKit2,30,30,Computational Limitation (ECGSYN integration bottleneck under fixed SEED=42),N/A,N/A,N/A (Integration Bottleneck),N/A,N/A
+physioKIT,Unsupported,30,Direct HRV generation control is not exposed through the tested physioKIT high-level synthesis API,N/A,N/A,N/A,N/A,N/A
