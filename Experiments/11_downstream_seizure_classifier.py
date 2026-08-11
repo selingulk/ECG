@@ -39,8 +39,8 @@ print("=== Running Experiment 11: Downstream AI Seizure Detection Classifier Ben
 
 np.random.seed(42)
 
-FS = 500
-WINDOW_LEN = 2500  # 5-second window at 500 Hz
+FS = 200 # Matched to PhysioNet szdb (200 Hz)
+WINDOW_LEN = 1000  # 5-second window at 200 Hz
 
 def extract_features(signal, fs=FS):
     # Vectorized fast statistical feature extraction

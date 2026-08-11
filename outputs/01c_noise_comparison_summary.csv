@@ -1,9 +1,9 @@
 Library,Nominal_Noise_Parameter,Parameter_Name,Signal_Std_au,Calculated_SNR_dB,SNR_Method_Notes
 NeuroKit2,0.0,noise,0.2386,Infinity (Clean),Calculated via deterministic clean reference subtraction (random_state controlled)
-physioKIT,0.0,noise_multiplier,0.0729,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
+physioKIT,0.0,noise_multiplier,0.0586,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
 NeuroKit2,0.01,noise,0.2386,Infinity (Clean),Calculated via deterministic clean reference subtraction (random_state controlled)
-physioKIT,0.01,noise_multiplier,0.0542,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
+physioKIT,0.01,noise_multiplier,0.1766,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
 NeuroKit2,0.05,noise,0.2386,Infinity (Clean),Calculated via deterministic clean reference subtraction (random_state controlled)
-physioKIT,0.05,noise_multiplier,0.2236,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
+physioKIT,0.05,noise_multiplier,0.1631,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
 NeuroKit2,0.1,noise,0.2386,Infinity (Clean),Calculated via deterministic clean reference subtraction (random_state controlled)
-physioKIT,0.1,noise_multiplier,0.2205,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR
+physioKIT,0.1,noise_multiplier,0.0691,N/A (Unseeded Phase Delays),physioKIT lacks random-state seed control; phase shifts prevent direct subtraction SNR

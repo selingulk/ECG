@@ -2,7 +2,7 @@
 Experiment 09: Empirical Real-Fitted Synthetic ECG Generation Pipeline
 ========================================================================
 Objective: Drive NeuroKit2 and physioKIT ECG generation using empirical parameters
-(Mean HR, SDNN, EMG noise) extracted from real seizure stages in Experiment 08.
+(Mean HR, SDNN, EMG noise) extracted from real epileptic seizure stages in Experiment 08.
 
 Fixes & Disclaimers:
   - Boundary Discontinuity Alignment: Aligns vertical DC offsets across independently
@@ -34,8 +34,8 @@ if not os.path.exists(params_csv):
 
 df_params = pd.read_csv(params_csv)
 
-FS = 500
-DURATION_PHASE = 15 # seconds per stage
+FS = 200 # Matched to PhysioNet szdb (200 Hz)
+DURATION_PHASE = 60 # seconds per stage
 N_SAMPLES_PHASE = FS * DURATION_PHASE
 
 fitted_signals = {}
@@ -50,7 +50,7 @@ for idx, row in df_params.iterrows():
     # Map SDNN (ms) to NeuroKit2 heart_rate_std parameter
     # Bound heart_rate_std to avoid ODE integration bottleneck
     hr_std_param = min(15.0, max(0.0, sdnn_ms / 10.0))
-    noise_param = min(0.10, max(0.005, emg_power * 10.0))
+    noise_param = min(0.15, max(0.005, emg_power * 50.0))
     
     # Generate continuous signal using 1-second chunks with boundary DC offset alignment
     ecg_chunks = []
@@ -91,7 +91,7 @@ for idx, row in df_params.iterrows():
 
 # Plot empirically fitted synthetic ECG stages
 fig, axes = plt.subplots(4, 1, figsize=(12, 10), sharex=True)
-fig.suptitle("Experiment 09: Empirical Real-Fitted Synthetic ECG Generation (NeuroKit2 & physioKIT Driven)\n"
+fig.suptitle("Experiment 09: Empirical Real-Fitted Synthetic ECG Generation (PhysioNet szdb Parameters)\n"
              "Synthesized from Real Seizure Stage Parameters (Boundary-Discontinuity Aligned, Units: a.u.)",
              fontsize=11, fontweight='bold', y=0.995)
 
@@ -118,3 +118,4 @@ csv_path = "outputs/09_fitted_synthetic_signals.csv"
 df_09 = pd.DataFrame(records_09)
 df_09.to_csv(csv_path, index=False)
 print(f"Fitted synthetic parameters saved to {csv_path}\n")
+

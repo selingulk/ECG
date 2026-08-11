@@ -38,11 +38,12 @@ if not os.path.exists(params_csv) or not os.path.exists(synth_csv):
 df_real  = pd.read_csv(params_csv)
 df_synth = pd.read_csv(synth_csv)
 
-FS = 500
-DURATION = 15
+FS = 200 # Matched to PhysioNet szdb (200 Hz)
+DURATION = 60
 N_SAMPLES = FS * DURATION
 
 metrics_results = []
+
 
 for idx, row in df_real.iterrows():
     stage_name = row["Seizure_Stage"]

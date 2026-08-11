@@ -226,11 +226,11 @@ Evaluated under a common EC57-style protocol using a $\pm 150\text{ ms}$ matchin
 
 ---
 
-### Experiment 08: Real Seizure ECG Stage Parameter Extraction Pipeline
+### Experiment 08: Real Epileptic Seizure ECG Stage Parameter Extraction (PhysioNet `szdb`)
 
-Extracted empirical physiological features across 4 clinical seizure stages from real patient recordings:
+Extracted empirical physiological features across 4 clinical seizure stages from real patient recordings in the **PhysioNet Post-Ictal Heart Rate Oscillations in Partial Epilepsy Database (`szdb`)**, using EEG-confirmed seizure timestamps:
 
-| Seizure Stage | Mean HR (BPM) | SDNN (ms) | RMSSD (ms) | EMG Band Power ($20\text{--}150\text{ Hz}$) | Signal Amplitude Std ($\text{a.u.}$) |
+| Seizure Stage | Mean HR (BPM) | SDNN (ms) | RMSSD (ms) | EMG Band Power ($20\text{--}100\text{ Hz}$) | Signal Amplitude Std ($\text{mV}$) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Interictal Baseline** | 109.13 | 168.84 | 219.23 | 0.009403 | 0.5084 |
 | **Preictal Transition** | 94.03 | 187.34 | 263.36 | 0.000959 | 0.4945 |
@@ -244,7 +244,8 @@ Extracted empirical physiological features across 4 clinical seizure stages from
 ### Experiment 09: Empirical Real-Fitted Synthetic ECG Generation
 
 Fitted continuous NeuroKit2 synthetic parameters to empirical stage measurements with boundary step-discontinuity alignment across stage transitions:
-- Signal Length: $7,500\text{ samples}$ per phase ($15\text{s}$ at $500\text{ Hz}$).
+- Sampling Rate: Matched to PhysioNet `szdb` ($200\text{ Hz}$).
+- Signal Length: $12,000\text{ samples}$ per phase ($60\text{s}$ at $200\text{ Hz}$).
 - Amplitude Labels: Strictly designated as **Arbitrary Units ($\text{a.u.}$)**.
 
 *Data & Visualisation:* `outputs/09_fitted_synthetic_signals.csv`, `outputs/09_empirical_synthetic_fitting.png`
@@ -253,7 +254,7 @@ Fitted continuous NeuroKit2 synthetic parameters to empirical stage measurements
 
 ### Experiment 10: Quantitative Real vs. Synthetic Feature Distance Metrics
 
-Evaluated statistical distribution discrepancy between real clinical recordings, NeuroKit2 synthetic signals, and `torch_ecg` augmented signals:
+Evaluated statistical distribution discrepancy between real clinical `szdb` recordings, NeuroKit2 synthetic signals, and `torch_ecg` augmented signals:
 
 | Seizure Stage | Comparison Pair | $W_1$ R-R Dist (s) | Spectral PSD MSE ($\text{a.u.}^2/\text{Hz}$)* | Morphological Euclidean Dist | Validation Status |
 | :--- | :--- | :---: | :---: | :---: | :--- |
@@ -266,7 +267,7 @@ Evaluated statistical distribution discrepancy between real clinical recordings,
 | **Postictal Recovery** | Real vs. NK2 Synthetic | 0.0128 | $1.98 \times 10^{-5}$ | 1.5026 | High Distribution Match |
 | **Postictal Recovery** | Real vs. `torch_ecg` Augmented | 0.0000 | $8.91 \times 10^{-5}$ | 3.0887 | Task-Dependent Feature Noise |
 
-*\*Note on PSD MSE Method & Precision:* Power Spectral Densities were estimated using Welch's method ($f_s = 500\text{ Hz}$, $N_{\text{fft}} = 256$, Hanning windowing, unnormalized spectrum density $\text{a.u.}^2/\text{Hz}$). Values are reported in scientific notation ($10^{-5}\text{--}10^{-4}\text{ a.u.}^2/\text{Hz}$) to reflect true numerical precision.
+*\*Note on PSD MSE Method & Precision:* Power Spectral Densities were estimated using Welch's method ($f_s = 200\text{ Hz}$, $N_{\text{fft}} = 256$, Hanning windowing, unnormalized spectrum density $\text{a.u.}^2/\text{Hz}$). Values are reported in scientific notation ($10^{-5}\text{--}10^{-4}\text{ a.u.}^2/\text{Hz}$) to reflect true numerical precision.
 
 *Data & Visualisation:* `outputs/10_quantitative_validation_metrics.csv`, `outputs/10_real_vs_synthetic_validation.png`
 
@@ -274,7 +275,7 @@ Evaluated statistical distribution discrepancy between real clinical recordings,
 
 ### Experiment 11: Downstream AI Seizure Detection Classifier Benchmark
 
-Evaluated downstream machine learning diagnostic performance (Random Forest) across 3 training cohort configurations:
+Evaluated downstream machine learning diagnostic performance (Random Forest) for **Epileptic Seizure vs. Non-Seizure** detection across 3 training cohort configurations using $200\text{ Hz}$ windowed segments:
 
 | Model Configuration | Training Samples ($N$) | Test Sensitivity (%) | Test Precision (%) | Test $F_1$-Score (%) | Test ROC-AUC (%) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -287,6 +288,7 @@ Evaluated downstream machine learning diagnostic performance (Random Forest) acr
 - **Nuanced Finding:** Empirically fitted synthetic ECG signals and task-safe augmentations doubled the training set size ($160 \rightarrow 320$ samples) without reducing performance on the current test set. However, a patient-independent evaluation is required to evaluate true out-of-distribution generalization.
 
 *Data & Visualisation:* `outputs/11_downstream_seizure_classifier_summary.csv`, `outputs/11_downstream_seizure_classifier_benchmark.png`
+
 
 ---
 
