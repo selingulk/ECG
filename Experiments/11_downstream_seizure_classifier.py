@@ -43,7 +43,8 @@ WINDOW_LEN = 1000  # 5-second window at 200 Hz (1000 samples)
 params_csv = "outputs/08_empirical_seizure_parameters.csv"
 if os.path.exists(params_csv):
     df_params = pd.read_csv(params_csv)
-    param_dict = {row["Clinical_Class"]: row for _, row in df_params.iterrows()}
+    c_col = "Clinical_Class" if "Clinical_Class" in df_params.columns else "Seizure_Stage"
+    param_dict = {row[c_col]: row for _, row in df_params.iterrows()}
 else:
     param_dict = {
         "Interictal_Baseline": {"Mean_HR_BPM": 71.0, "SDNN_ms": 30.0, "EMG_Band_Power": 0.005},
@@ -52,6 +53,7 @@ else:
         "Postictal_Recovery": {"Mean_HR_BPM": 92.0, "SDNN_ms": 35.0, "EMG_Band_Power": 0.01},
         "Hard_Negative_Arrhythmia": {"Mean_HR_BPM": 115.0, "SDNN_ms": 65.0, "EMG_Band_Power": 0.02}
     }
+
 
 def extract_multi_domain_features(signal, fs=FS):
     # Time-domain statistical features
