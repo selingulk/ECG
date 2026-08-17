@@ -1,9 +1,9 @@
 Seizure_Stage,Comparison,Wasserstein_RR_Dist_s,Spectral_PSD_MSE,Morphological_Euclidean_Dist,Validation_Status
-Interictal_Baseline,Real vs NeuroKit2 Synthetic,0.018,0.0,4.0654,High Distribution Match
-Interictal_Baseline,Real vs torch_ecg Augmented (BaselineWander),0.0005,0.0,3.1374,Task-Dependent Feature Noise
-Preictal_Transition,Real vs NeuroKit2 Synthetic,0.0313,0.0,2.8241,High Distribution Match
-Preictal_Transition,Real vs torch_ecg Augmented (BaselineWander),0.0007,0.0,3.1525,Task-Dependent Feature Noise
-Ictal_Seizure_Phase,Real vs NeuroKit2 Synthetic,0.0211,0.0,1.7719,High Distribution Match
-Ictal_Seizure_Phase,Real vs torch_ecg Augmented (BaselineWander),0.0008,0.0,3.0055,Task-Dependent Feature Noise
-Postictal_Recovery,Real vs NeuroKit2 Synthetic,0.0128,0.0,1.5026,High Distribution Match
-Postictal_Recovery,Real vs torch_ecg Augmented (BaselineWander),0.0,0.0,3.0887,Task-Dependent Feature Noise
+Interictal_Baseline,Real vs NeuroKit2 Synthetic,0.0046,3.859102e-09,0.6958,High Distribution Match
+Interictal_Baseline,Real vs torch_ecg Augmented (BaselineWander),0.0007,2.717285e-07,1.9118,Task-Dependent Feature Noise
+Preictal_Transition,Real vs NeuroKit2 Synthetic,0.0046,2.983646e-09,1.3948,High Distribution Match
+Preictal_Transition,Real vs torch_ecg Augmented (BaselineWander),0.0009,3.884225e-07,1.9749,Task-Dependent Feature Noise
+Ictal_Seizure_Phase,Real vs NeuroKit2 Synthetic,0.0034,1.323905e-08,3.3087,High Distribution Match
+Ictal_Seizure_Phase,Real vs torch_ecg Augmented (BaselineWander),0.0003,3.406692e-07,2.0395,Task-Dependent Feature Noise
+Postictal_Recovery,Real vs NeuroKit2 Synthetic,0.02,1.897559e-08,0.9159,High Distribution Match
+Postictal_Recovery,Real vs torch_ecg Augmented (BaselineWander),0.0092,3.271016e-07,1.9902,Task-Dependent Feature Noise

@@ -46,7 +46,7 @@ metrics_results = []
 
 
 for idx, row in df_real.iterrows():
-    stage_name = row["Seizure_Stage"]
+    c_name = row["Clinical_Class"] if "Clinical_Class" in row else row.get("Seizure_Stage", f"Class_{idx}")
     real_hr = float(row["Mean_HR_BPM"])
     real_sdnn = float(row["SDNN_ms"])
     
@@ -90,7 +90,7 @@ for idx, row in df_real.iterrows():
     morph_dist_bw = float(np.linalg.norm(beat_real - beat_bw))
 
     metrics_results.append({
-        "Seizure_Stage": stage_name,
+        "Clinical_Class": c_name,
         "Comparison": "Real vs NeuroKit2 Synthetic",
         "Wasserstein_RR_Dist_s": round(w1_nk, 4),
         "Spectral_PSD_MSE": float(f"{psd_mse_nk:.6e}"),
@@ -99,7 +99,7 @@ for idx, row in df_real.iterrows():
     })
 
     metrics_results.append({
-        "Seizure_Stage": stage_name,
+        "Clinical_Class": c_name,
         "Comparison": "Real vs torch_ecg Augmented (BaselineWander)",
         "Wasserstein_RR_Dist_s": round(w1_bw, 4),
         "Spectral_PSD_MSE": float(f"{psd_mse_bw:.6e}"),
@@ -110,12 +110,12 @@ for idx, row in df_real.iterrows():
 # Visual summary plot of quantitative validation metrics
 df_metrics = pd.DataFrame(metrics_results)
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-fig.suptitle("Experiment 10: Quantitative Feature Validation (Real vs. Synthetic & Augmented ECG)\n"
-             "Evaluating Wasserstein R-R Distance & Spectral PSD Error across Seizure Stages",
+fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+fig.suptitle("Experiment 10: Quantitative Feature Validation Across 5 Seizure & Arrhythmia Classes\n"
+             "Evaluating Wasserstein R-R Distance & Spectral PSD Error",
              fontsize=11, fontweight='bold')
 
-stages = df_metrics["Seizure_Stage"].unique()
+stages = df_metrics["Clinical_Class"].unique()
 x_pos = np.arange(len(stages))
 width = 0.35
 
@@ -125,7 +125,7 @@ w1_bw_vals = df_metrics[df_metrics["Comparison"] == "Real vs torch_ecg Augmented
 axes[0].bar(x_pos - width/2, w1_nk_vals, width, label="Real vs Synthetic", color="steelblue")
 axes[0].bar(x_pos + width/2, w1_bw_vals, width, label="Real vs Augmented", color="orange")
 axes[0].set_xticks(x_pos)
-axes[0].set_xticklabels([s.replace("_", "\n") for s in stages], fontsize=8)
+axes[0].set_xticklabels([s.replace("_", "\n") for s in stages], fontsize=7.5)
 axes[0].set_title("1. Wasserstein R-R Distance (s) [Lower is Better]", fontsize=9.5, fontweight='bold')
 axes[0].set_ylabel("Wasserstein Distance (s)")
 axes[0].legend(fontsize=8)
@@ -137,7 +137,7 @@ psd_bw_vals = df_metrics[df_metrics["Comparison"] == "Real vs torch_ecg Augmente
 axes[1].bar(x_pos - width/2, psd_nk_vals, width, label="Real vs Synthetic", color="steelblue")
 axes[1].bar(x_pos + width/2, psd_bw_vals, width, label="Real vs Augmented", color="orange")
 axes[1].set_xticks(x_pos)
-axes[1].set_xticklabels([s.replace("_", "\n") for s in stages], fontsize=8)
+axes[1].set_xticklabels([s.replace("_", "\n") for s in stages], fontsize=7.5)
 axes[1].set_title("2. Spectral PSD MSE [Lower is Better]", fontsize=9.5, fontweight='bold')
 axes[1].set_ylabel("PSD MSE")
 axes[1].legend(fontsize=8)
@@ -153,3 +153,4 @@ plt.close()
 csv_path = "outputs/10_quantitative_validation_metrics.csv"
 df_metrics.to_csv(csv_path, index=False)
 print(f"Validation metrics saved to {csv_path}\n")
+
