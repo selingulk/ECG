@@ -84,12 +84,17 @@ def generate_class_window(class_name, seed):
     
     method_sim = "multichannel" if class_name == "Hard_Negative_Arrhythmia" else "ecgsyn"
     sig = nk.ecg_simulate(duration=5, sampling_rate=FS, heart_rate=hr_val, heart_rate_std=sdnn_val/10.0, noise=emg_val*5.0, method=method_sim, random_state=seed)
-    
+    if isinstance(sig, pd.DataFrame):
+        sig = sig.iloc[:, 0].values
+    elif isinstance(sig, np.ndarray) and sig.ndim > 1:
+        sig = sig.flatten()
+        
     if len(sig) > WINDOW_LEN:
         sig = sig[:WINDOW_LEN]
     elif len(sig) < WINDOW_LEN:
         sig = np.pad(sig, (0, WINDOW_LEN - len(sig)))
     return sig
+
 
 def build_dataset(n_per_class=50, seed_offset=0):
     classes = ["Interictal_Baseline", "Preictal_Prediction", "Ictal_Seizure", "Hard_Negative_Arrhythmia"]

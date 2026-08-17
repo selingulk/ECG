@@ -1,9 +1,9 @@
 Library,Target_HR_BPM,Detected_R_Peaks,Mean_RR_s,Achieved_HR_BPM,Absolute_HR_Error_BPM
 NeuroKit2,50,9,1.0785,55.63,5.63
-physioKIT,50,9,1.0885,55.12,5.12
+physioKIT,50,9,1.1128,53.92,3.92
 NeuroKit2,70,12,0.8215,73.04,3.04
-physioKIT,70,12,0.8662,69.27,0.73
+physioKIT,70,11,0.857,70.01,0.01
 NeuroKit2,100,17,0.5793,103.58,3.58
-physioKIT,100,16,0.5999,100.02,0.02
+physioKIT,100,17,0.5797,103.49,3.49
 NeuroKit2,150,24,0.4015,149.45,0.55
-physioKIT,150,24,0.3988,150.46,0.46
+physioKIT,150,24,0.4,150.0,0.0

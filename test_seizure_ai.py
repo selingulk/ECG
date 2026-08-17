@@ -48,7 +48,12 @@ def generate_window(class_name, seed):
     info = param_dict.get(class_name, {"Mean_HR_BPM": 75.0, "SDNN_ms": 30.0, "EMG_Band_Power": 0.01})
     method_sim = "multichannel" if class_name == "Hard_Negative_Arrhythmia" else "ecgsyn"
     sig = nk.ecg_simulate(duration=5, sampling_rate=FS, heart_rate=float(info["Mean_HR_BPM"]), noise=float(info["EMG_Band_Power"])*5.0, method=method_sim, random_state=seed)
+    if isinstance(sig, pd.DataFrame):
+        sig = sig.iloc[:, 0].values
+    elif isinstance(sig, np.ndarray) and sig.ndim > 1:
+        sig = sig.flatten()
     return sig[:WINDOW_LEN]
+
 
 # Build training set
 classes = ["Interictal_Baseline", "Preictal_Prediction", "Ictal_Seizure", "Hard_Negative_Arrhythmia"]

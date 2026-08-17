@@ -1,7 +1,7 @@
 Library,Requested_Duration_s,Expected_Samples,Returned_Samples,Actual_Duration_s,Median_Runtime_ms,Valid_Finite_Output,Detected_Beat_Count,Achieved_HR_BPM
-NeuroKit2,5,2500,2500,5.0,84.16,True,6,77.0
-physioKIT,5,2500,2500,5.0,162.62,True,5,66.3
-NeuroKit2,10,5000,5000,10.0,135.47,True,12,73.04
-physioKIT,10,5000,5000,10.0,285.66,True,12,69.42
-NeuroKit2,60,30000,30000,60.0,553.75,True,71,70.47
-physioKIT,60,30000,30000,60.0,1670.18,True,69,70.01
+NeuroKit2,5,2500,2500,5.0,125.88,True,6,77.0
+physioKIT,5,2500,2500,5.0,271.05,True,6,77.96
+NeuroKit2,10,5000,5000,10.0,231.05,True,12,73.04
+physioKIT,10,5000,5000,10.0,484.2,True,11,70.01
+NeuroKit2,60,30000,30000,60.0,881.36,True,71,70.47
+physioKIT,60,30000,30000,60.0,2683.23,True,70,70.06

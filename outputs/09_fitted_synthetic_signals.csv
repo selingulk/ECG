@@ -1,5 +1,6 @@
-Seizure_Stage,Target_Mean_HR_BPM,Empirical_SDNN_ms,Fitted_hr_std_param,Fitted_noise_param,Synthetic_Signal_Samples,Boundary_Discontinuity_Aligned,Amplitude_Units,Pretraining_Suitability
-Interictal_Baseline,76.11,32.09,3.21,0.15,12000,True,Arbitrary Units (a.u.),Unevaluated
-Preictal_Transition,81.14,47.16,4.72,0.15,12000,True,Arbitrary Units (a.u.),Unevaluated
-Ictal_Seizure_Phase,116.38,52.76,5.28,0.15,12000,True,Arbitrary Units (a.u.),Unevaluated
-Postictal_Recovery,78.64,190.38,15.0,0.15,12000,True,Arbitrary Units (a.u.),Unevaluated
+Clinical_Class,Target_Mean_HR_BPM,Empirical_SDNN_ms,Fitted_hr_std_param,Fitted_noise_param,Synthetic_Signal_Samples,Boundary_Discontinuity_Aligned,Amplitude_Units
+Interictal_Baseline,70.42,83.98,8.4,0.15,12000,True,Arbitrary Units (a.u.)
+Preictal_Prediction,78.1,46.89,4.69,0.15,12000,True,Arbitrary Units (a.u.)
+Ictal_Seizure,111.57,47.58,4.76,0.15,12000,True,Arbitrary Units (a.u.)
+Postictal_Recovery,78.64,190.38,15.0,0.15,12000,True,Arbitrary Units (a.u.)
+Hard_Negative_Arrhythmia,101.38,194.78,15.0,0.15,12000,True,Arbitrary Units (a.u.)

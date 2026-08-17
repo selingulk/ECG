@@ -65,7 +65,12 @@ for idx, row in df_params.iterrows():
             method=method_sim,
             random_state=42 + chunk_idx + idx * 100
         )
+        if isinstance(chunk_sig, pd.DataFrame):
+            chunk_sig = chunk_sig.iloc[:, 0].values
+        elif isinstance(chunk_sig, np.ndarray) and chunk_sig.ndim > 1:
+            chunk_sig = chunk_sig.flatten()
         ecg_chunks.append(chunk_sig)
+
         
     # Align boundary DC offsets to eliminate step discontinuities
     aligned_chunks = []
