@@ -1,11 +1,11 @@
-Clinical_Class,Comparison,Wasserstein_RR_Dist_s,Spectral_PSD_MSE,Morphological_Euclidean_Dist,Validation_Status
-Interictal_Baseline,Real vs NeuroKit2 Synthetic,0.0169,4.873678e-09,0.6956,High Distribution Match
-Interictal_Baseline,Real vs torch_ecg Augmented (BaselineWander),0.001,3.963219e-07,1.9238,Task-Dependent Feature Noise
-Preictal_Prediction,Real vs NeuroKit2 Synthetic,0.0042,2.267161e-07,3.7484,High Distribution Match
-Preictal_Prediction,Real vs torch_ecg Augmented (BaselineWander),0.0006,3.840367e-07,1.9206,Task-Dependent Feature Noise
-Ictal_Seizure,Real vs NeuroKit2 Synthetic,0.0033,2.222337e-08,3.3427,High Distribution Match
-Ictal_Seizure,Real vs torch_ecg Augmented (BaselineWander),0.0005,4.670275e-07,1.8874,Task-Dependent Feature Noise
-Postictal_Recovery,Real vs NeuroKit2 Synthetic,0.02,1.897559e-08,0.9159,High Distribution Match
-Postictal_Recovery,Real vs torch_ecg Augmented (BaselineWander),0.0015,3.444947e-07,1.947,Task-Dependent Feature Noise
-Hard_Negative_Arrhythmia,Real vs NeuroKit2 Synthetic,0.0191,1.949746e-08,3.031,High Distribution Match
-Hard_Negative_Arrhythmia,Real vs torch_ecg Augmented (BaselineWander),0.0007,3.742938e-07,1.9447,Task-Dependent Feature Noise
+Clinical_Class,Comparison,Reference_Data_Origin,Wasserstein_RR_Dist_s,KS_Statistic,KS_p_value,Normalized_Spectral_PSD_MSE,Spectral_Centroid_Error_Hz,Beat_Template_Correlation,Fidelity_Assessment
+Interictal_Baseline,Real Clinical Reference vs NeuroKit2 Synthetic,real_clinical_physionet (sz01/sz04/203),0.0396,0.2031,0.0496,5.336839e-05,2.36,0.2045,Exploratory Match
+Interictal_Baseline,Real Clinical Reference vs Augmented (BW + Noise),real_clinical_physionet (sz01/sz04/203),0.0701,0.3867,0.0,3.9475e-05,0.0,0.98,Perturbed Real Signal
+Preictal_Prediction,Real Clinical Reference vs NeuroKit2 Synthetic,real_clinical_physionet (sz01/sz04/203),0.0345,0.1948,0.0473,4.418188e-05,2.15,0.2347,Exploratory Match
+Preictal_Prediction,Real Clinical Reference vs Augmented (BW + Noise),real_clinical_physionet (sz01/sz04/203),0.1014,0.5252,0.0,3.10064e-05,0.0,0.98,Perturbed Real Signal
+Ictal_Seizure,Real Clinical Reference vs NeuroKit2 Synthetic,real_clinical_physionet (sz01/sz04/203),0.0307,0.2028,0.0038,2.430436e-05,0.65,0.235,Exploratory Match
+Ictal_Seizure,Real Clinical Reference vs Augmented (BW + Noise),real_clinical_physionet (sz01/sz04/203),0.0352,0.198,0.0055,3.721533e-05,0.0,0.98,Perturbed Real Signal
+Postictal_Recovery,Real Clinical Reference vs NeuroKit2 Synthetic,real_clinical_physionet (sz01/sz04/203),0.0634,0.2946,0.0001,0.0008117538,3.68,0.2356,Exploratory Match
+Postictal_Recovery,Real Clinical Reference vs Augmented (BW + Noise),real_clinical_physionet (sz01/sz04/203),0.0692,0.2022,0.0304,2.521485e-06,0.0,0.98,Perturbed Real Signal
+Hard_Negative_Arrhythmia,Real Clinical Reference vs NeuroKit2 Synthetic,real_clinical_physionet (sz01/sz04/203),0.073,0.2176,0.0115,0.0001406677,2.54,-0.128,Exploratory Match
+Hard_Negative_Arrhythmia,Real Clinical Reference vs Augmented (BW + Noise),real_clinical_physionet (sz01/sz04/203),0.0356,0.0964,0.7175,2.360058e-06,0.0,0.98,Perturbed Real Signal

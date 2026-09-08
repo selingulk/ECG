@@ -1,6 +1,6 @@
-Clinical_Class,Target_Mean_HR_BPM,Empirical_SDNN_ms,Fitted_hr_std_param,Fitted_noise_param,Synthetic_Signal_Samples,Boundary_Discontinuity_Aligned,Amplitude_Units
-Interictal_Baseline,70.42,83.98,8.4,0.15,12000,True,Arbitrary Units (a.u.)
-Preictal_Prediction,78.1,46.89,4.69,0.15,12000,True,Arbitrary Units (a.u.)
-Ictal_Seizure,111.57,47.58,4.76,0.15,12000,True,Arbitrary Units (a.u.)
-Postictal_Recovery,78.64,190.38,15.0,0.15,12000,True,Arbitrary Units (a.u.)
-Hard_Negative_Arrhythmia,101.38,194.78,15.0,0.15,12000,True,Arbitrary Units (a.u.)
+Clinical_Class,Target_Mean_HR_BPM,Empirical_SDNN_ms,Empirical_Std_HR_BPM,Fitted_hr_std_param,Fitted_noise_param,Synthetic_Signal_Samples,Boundary_Discontinuity_Aligned,Amplitude_Units,Empirical_Source_Records,Generator_Status
+Interictal_Baseline,65.9,66.15,4.78,4.78,0.0821,12000,True,Arbitrary Units (a.u.),"sz01, sz04",Empirically Parameterized (Preliminary Proof-of-Concept)
+Preictal_Prediction,71.25,75.41,10.0,10.0,0.0828,12000,True,Arbitrary Units (a.u.),"sz01, sz04",Empirically Parameterized (Preliminary Proof-of-Concept)
+Ictal_Seizure,111.63,81.83,18.48,18.48,0.0935,12000,True,Arbitrary Units (a.u.),"sz01, sz04",Empirically Parameterized (Preliminary Proof-of-Concept)
+Postictal_Recovery,84.91,126.89,19.25,19.25,0.0535,12000,True,Arbitrary Units (a.u.),"sz01, sz04",Empirically Parameterized (Preliminary Proof-of-Concept)
+Hard_Negative_Arrhythmia,112.83,206.97,39.04,39.04,0.0235,12000,True,Arbitrary Units (a.u.),203,Empirically Parameterized (Preliminary Proof-of-Concept)

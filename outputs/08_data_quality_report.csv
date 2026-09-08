@@ -1,0 +1,10 @@
+dataset,record_id,seizure_id,phase,channel_name,original_sampling_rate_hz,window_duration_s,Detected_Peaks,Valid_RR_Count,NaN_Fraction,Clipping_Detected,Clipping_Fraction,Quality_OK,Quality_Notes
+szdb,sz01,sz01_sz1,Interictal_Baseline,ECG,200.0,60.0,71,70,0.0,False,0.000583,True,Quality satisfactory
+szdb,sz01,sz01_sz1,Preictal_Prediction,ECG,200.0,60.0,78,77,0.0,False,0.001417,True,Quality satisfactory
+szdb,sz01,sz01_sz1,Ictal_Seizure,ECG,200.0,60.0,111,110,0.0,False,0.000167,True,Quality satisfactory
+szdb,sz01,sz01_sz1,Postictal_Recovery,ECG,200.0,60.0,78,77,0.0,False,0.000333,True,Quality satisfactory
+szdb,sz04,sz04_sz1,Interictal_Baseline,ECG,200.0,60.0,60,59,0.0,False,0.00025,True,Quality satisfactory
+szdb,sz04,sz04_sz1,Preictal_Prediction,ECG,200.0,60.0,63,62,0.0,False,0.009,True,Quality satisfactory
+szdb,sz04,sz04_sz1,Ictal_Seizure,ECG,200.0,60.0,105,104,0.0,False,0.003083,True,Quality satisfactory
+szdb,sz04,sz04_sz1,Postictal_Recovery,ECG,200.0,60.0,84,83,0.0,False,0.000583,True,Quality satisfactory
+mitdb,203,none,Hard_Negative_Arrhythmia,MLII,360.0,60.0,100,99,0.0,False,9.3e-05,True,Quality satisfactory

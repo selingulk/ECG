@@ -1,3 +1,4 @@
-Cohort_Name,Train_Samples,Overall_Accuracy_%,Macro_F1_Score_%,Preictal_Prediction_Sensitivity_%,Ictal_Seizure_Detection_Sensitivity_%,Arrhythmia_Discrimination_Rate_%
-Model A (Real Only),160,98.0,97.99,98.0,100.0,100.0
-Model B (Real + Synthetic Expanded),320,99.0,99.0,98.0,100.0,100.0
+Cohort_Name,Train_Samples,HeldOut_Real_Test_Samples,Test_Evaluation_Type,Overall_Accuracy_%,Macro_F1_%,Weighted_F1_%,Macro_AUROC_%,Interictal_Sensitivity_%,Preictal_Sensitivity_%,Ictal_Sensitivity_%,Arrhythmia_Discrimination_Rate_%
+Model A (Real Only),132,72,"100% Real Clinical Data (PhysioNet sz01, sz04, 203)",87.5,88.72,87.25,97.67,92.86,64.71,92.86,100.0
+Model B (Real + Conventional Aug),336,72,"100% Real Clinical Data (PhysioNet sz01, sz04, 203)",88.89,89.81,88.56,99.13,96.43,64.71,92.86,100.0
+Model C (Real + Empirical Synth),192,72,"100% Real Clinical Data (PhysioNet sz01, sz04, 203)",87.5,88.72,87.25,98.72,92.86,64.71,92.86,100.0

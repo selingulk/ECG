@@ -32,16 +32,16 @@ def extract_multi_domain_features(signal, fs=FS):
     f_rms  = float(np.sqrt(np.mean(signal**2)))
     zero_crossings = float(np.sum(np.diff(signal > 0) != 0))
     crest_factor = float(np.max(np.abs(signal)) / (f_rms + 1e-8))
-    
+
     f, psd = sp_signal.welch(signal, fs=fs, nperseg=min(256, len(signal)))
     emg_idx = (f >= 20.0) & (f <= 100.0)
-    emg_power = float(np.trapz(psd[emg_idx], f[emg_idx])) if np.any(emg_idx) else 0.0
+    emg_power = float(np.trapezoid(psd[emg_idx], f[emg_idx])) if np.any(emg_idx) else 0.0
     lf_idx = (f >= 0.04) & (f <= 0.15)
     hf_idx = (f >= 0.15) & (f <= 0.40)
-    lf_power = float(np.trapz(psd[lf_idx], f[lf_idx])) if np.any(lf_idx) else 1e-6
-    hf_power = float(np.trapz(psd[hf_idx], f[hf_idx])) if np.any(hf_idx) else 1e-6
+    lf_power = float(np.trapezoid(psd[lf_idx], f[lf_idx])) if np.any(lf_idx) else 1e-6
+    hf_power = float(np.trapezoid(psd[hf_idx], f[hf_idx])) if np.any(hf_idx) else 1e-6
     lf_hf_ratio = float(lf_power / (hf_power + 1e-8))
-    
+
     return [f_mean, f_std, f_ptp, f_rms, zero_crossings, crest_factor, emg_power, lf_hf_ratio]
 
 def generate_window(class_name, seed):
@@ -83,10 +83,10 @@ for title, true_class, seed in test_samples:
     feats = extract_multi_domain_features(test_sig)
     pred_idx = clf.predict([feats])[0]
     probs = clf.predict_proba([feats])[0]
-    
+
     pred_name = classes[pred_idx]
     confidence = probs[pred_idx] * 100.0
-    
+
     status = "SUCCESS (Correctly Classified)" if pred_name == true_class else "MISCLASSIFIED"
     print(f"\n{title}:")
     print(f"  - Target Ground Truth: {true_class}")
