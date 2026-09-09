@@ -158,5 +158,198 @@ def test_rule_11_no_silent_unverified_mitbih_label():
         assert len(str(r["Annotation_Evidence"])) > 5, "MIT-BIH annotation evidence string empty or trivial!"
 
 
+# ===========================================================================
+# Experiment 09 Scientific Integrity & Calibration Audit Suite
+# ===========================================================================
+
+def test_exp09_no_fallback_defaults_in_code():
+    """Exp 09 Integrity Rule 1: No fallback heart_rate_std = 3.0 or [1, 3, 6] in Exp 09 code."""
+    with open(EXP09_SCRIPT, "r", encoding="utf-8") as f:
+        code = f.read()
+    assert "best_hr_std = 3.0" not in code, "Found legacy fallback 'best_hr_std = 3.0' in Exp 09!"
+    assert "[1.0, 3.0, 6.0]" not in code, "Found legacy fallback candidate grid '[1.0, 3.0, 6.0]' in Exp 09!"
+    assert "[1, 3, 6]" not in code and "[1,3,6]" not in code, "Found fallback list [1, 3, 6] in Exp 09!"
+
+
+def test_exp09_missing_rhythm_inputs_handling():
+    """Exp 09 Integrity Rule 2: Missing rhythm inputs cause skip/not-calibrated, never fake defaults."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("exp09", EXP09_SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    # Test with NaN target_hr
+    res1 = mod.calibrate_rhythm_hrv(target_hr=np.nan, target_sdnn=50.0)
+    assert res1["calibrated"] is False, "Should not calibrate when target_hr is NaN!"
+    assert res1["status"] == "MISSING_REQUIRED_INPUTS"
+    assert np.isnan(res1["selected_hr_std"]), "Should not fabricate selected_hr_std when target_hr is NaN!"
+
+    # Test with NaN target_sdnn
+    res2 = mod.calibrate_rhythm_hrv(target_hr=70.0, target_sdnn=np.nan)
+    assert res2["calibrated"] is False, "Should not calibrate when target_sdnn is NaN!"
+    assert res2["status"] == "MISSING_REQUIRED_INPUTS"
+    assert np.isnan(res2["selected_hr_std"]), "Should not fabricate selected_hr_std when target_sdnn is NaN!"
+
+    # Test with non-positive inputs
+    res3 = mod.calibrate_rhythm_hrv(target_hr=-10.0, target_sdnn=50.0)
+    assert res3["calibrated"] is False
+    assert res3["status"] == "MISSING_REQUIRED_INPUTS"
+
+
+def test_exp09_search_bounds_configuration():
+    """Exp 09 Integrity Rule 3: Search spaces are explicit configuration constants, not physiological claims."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("exp09", EXP09_SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    assert hasattr(mod, "HR_STD_SEARCH_BOUNDS"), "HR_STD_SEARCH_BOUNDS must be defined at module level!"
+    assert hasattr(mod, "HR_STD_LOCAL_SEARCH_FACTORS"), "HR_STD_LOCAL_SEARCH_FACTORS must be defined at module level!"
+    assert hasattr(mod, "NOISE_SEARCH_GRID"), "NOISE_SEARCH_GRID must be defined at module level!"
+
+    bounds = mod.HR_STD_SEARCH_BOUNDS
+    assert isinstance(bounds, tuple) and len(bounds) == 2
+    assert bounds[0] >= 0.1 and bounds[1] <= 25.0
+
+    # Ensure comments clarify these are simulator search ranges, not clinical measurements
+    with open(EXP09_SCRIPT, "r", encoding="utf-8") as f:
+        content = f.read()
+    assert "simulator search bounds" in content.lower() or "simulator parameter search" in content.lower(), \
+        "Exp 09 must document that search bounds are simulator parameter configurations, not clinical measurements!"
+
+
+def test_exp09_no_unsupported_zero_heuristic_claims():
+    """Exp 09 Integrity Rule 4: 'Zero heuristic' and 'heuristic-free' claims must be removed."""
+    with open(EXP09_SCRIPT, "r", encoding="utf-8") as f:
+        content = f.read().lower()
+    assert "zero heuristic" not in content, "Found unsupported claim 'zero heuristic' in Exp 09!"
+    assert "zero-heuristic" not in content, "Found unsupported claim 'zero-heuristic' in Exp 09!"
+    assert "heuristic-free" not in content, "Found unsupported claim 'heuristic-free' in Exp 09!"
+
+
+def test_exp09_sampling_rate_provenance():
+    """Exp 09 Integrity Rule 5: Both source_sampling_rate_hz and generation_sampling_rate_hz are preserved."""
+    params_path = os.path.join(OUTPUT_DIR, "09_empirical_generation_parameters.csv")
+    report_path = os.path.join(OUTPUT_DIR, "09_generation_quality_report.csv")
+    assert os.path.exists(params_path), f"Missing {params_path}"
+    assert os.path.exists(report_path), f"Missing {report_path}"
+
+    df_p = pd.read_csv(params_path)
+    df_q = pd.read_csv(report_path)
+
+    assert "source_sampling_rate_hz" in df_p.columns, "source_sampling_rate_hz missing from parameters table!"
+    assert "generation_sampling_rate_hz" in df_p.columns, "generation_sampling_rate_hz missing from parameters table!"
+    assert "source_sampling_rate_hz" in df_q.columns, "source_sampling_rate_hz missing from quality report!"
+    assert "generation_sampling_rate_hz" in df_q.columns, "generation_sampling_rate_hz missing from quality report!"
+
+    # Standardized generation is 200 Hz
+    for fs in df_p["generation_sampling_rate_hz"]:
+        assert fs == 200.0, f"Unexpected generation_sampling_rate_hz: {fs}"
+
+    # Source rates contain both 200 Hz (SZDB) and 360 Hz (MIT-BIH)
+    src_rates = set(df_p["source_sampling_rate_hz"].unique())
+    assert 200.0 in src_rates, "Source sampling rate 200.0 Hz missing!"
+
+
+def test_exp09_continuous_generation_continuity_reporting():
+    """Exp 09 Integrity Rule 6: Continuous generation does not claim repaired chunk boundaries."""
+    report_path = os.path.join(OUTPUT_DIR, "09_generation_quality_report.csv")
+    compat_path = os.path.join(OUTPUT_DIR, "09_fitted_synthetic_signals.csv")
+    assert os.path.exists(report_path)
+    assert os.path.exists(compat_path)
+
+    df_q = pd.read_csv(report_path)
+    df_c = pd.read_csv(compat_path)
+
+    for _, r in df_q.iterrows():
+        if r.get("generation_status") == "SUCCESS":
+            assert r["is_continuous"] is True or r["is_continuous"] == "True"
+            assert r["no_chunk_boundaries"] is True or r["no_chunk_boundaries"] == "True"
+            assert "repaired" not in str(r.get("boundary_discontinuity_status", "")).lower()
+
+    for _, r in df_c.iterrows():
+        assert r["No_Chunk_Boundaries"] is True or r["No_Chunk_Boundaries"] == "True"
+        align_str = str(r["Boundary_Discontinuity_Aligned"])
+        assert "N/A" in align_str or "Continuous" in align_str, \
+            f"Boundary_Discontinuity_Aligned should reflect N/A or Continuous, found: {align_str}"
+
+
+def test_exp09_arrhythmia_separated_from_seizure_phases():
+    """Exp 09 Integrity Rule 7: Arrhythmia control is labeled as cardiac_arrhythmia_control, not a seizure phase."""
+    params_path = os.path.join(OUTPUT_DIR, "09_empirical_generation_parameters.csv")
+    report_path = os.path.join(OUTPUT_DIR, "09_generation_quality_report.csv")
+    compat_path = os.path.join(OUTPUT_DIR, "09_fitted_synthetic_signals.csv")
+
+    df_p = pd.read_csv(params_path)
+    df_q = pd.read_csv(report_path)
+    df_c = pd.read_csv(compat_path)
+
+    assert "condition_type" in df_p.columns
+    assert "condition_type" in df_q.columns
+    assert "Condition_Type" in df_c.columns
+
+    # Verify MIT-BIH / Hard_Negative_Arrhythmia rows
+    arrhythmia_p = df_p[df_p["phase"] == "Hard_Negative_Arrhythmia"]
+    for _, r in arrhythmia_p.iterrows():
+        assert r["condition_type"] == "cardiac_arrhythmia_control", \
+            f"Arrhythmia row has invalid condition_type: {r['condition_type']}"
+
+    # Verify seizure phase rows
+    seizure_p = df_p[df_p["phase"] != "Hard_Negative_Arrhythmia"]
+    for _, r in seizure_p.iterrows():
+        assert r["condition_type"] == "seizure_phase", \
+            f"Seizure row has invalid condition_type: {r['condition_type']}"
+
+
+def test_exp09_truthful_calibration_status():
+    """Exp 09 Integrity Rule 8: Calibration status is CALIBRATED only when empirical calibration succeeded."""
+    report_path = os.path.join(OUTPUT_DIR, "09_generation_quality_report.csv")
+    params_path = os.path.join(OUTPUT_DIR, "09_empirical_generation_parameters.csv")
+
+    df_q = pd.read_csv(report_path)
+    df_p = pd.read_csv(params_path)
+
+    for _, r in df_q.iterrows():
+        if r.get("generation_status") == "SUCCESS":
+            assert r["rhythm_calibration_status"] == "CALIBRATED"
+        else:
+            assert r["rhythm_calibration_status"] != "CALIBRATED"
+
+    for _, r in df_p.iterrows():
+        if r["rhythm_calibration_status"] == "CALIBRATED":
+            assert np.isfinite(r["target_mean_hr"]) and r["target_mean_hr"] > 0
+            assert np.isfinite(r["target_sdnn"]) and r["target_sdnn"] > 0
+            assert np.isfinite(r["selected_hr_std"]) and r["selected_hr_std"] > 0
+            assert np.isfinite(r["achieved_sdnn"]) and r["achieved_sdnn"] > 0
+            assert np.isfinite(r["sdnn_error_ms"])
+
+
+def test_exp08_exp09_feature_extraction_consistency():
+    """Exp 09 Integrity Rule 9: Feature extraction definitions in Exp 09 match Exp 08."""
+    import importlib.util
+
+    spec08 = importlib.util.spec_from_file_location("exp08", EXP08_SCRIPT)
+    mod08 = importlib.util.module_from_spec(spec08)
+    spec08.loader.exec_module(mod08)
+
+    spec09 = importlib.util.spec_from_file_location("exp09", EXP09_SCRIPT)
+    mod09 = importlib.util.module_from_spec(spec09)
+    spec09.loader.exec_module(mod09)
+
+    # Test spectral features consistency on identical test signal
+    np.random.seed(42)
+    t = np.linspace(0, 10, 2000)
+    test_sig = np.sin(2 * np.pi * 1.5 * t) + 0.2 * np.sin(2 * np.pi * 35.0 * t) + 0.05 * np.random.randn(2000)
+
+    spec08_res = mod08.compute_spectral_features(test_sig, 200)
+    spec09_res = mod09.compute_spectral_features(test_sig, 200)
+
+    for key in ["Relative_High_Frequency_Power", "Spectral_Centroid_Hz", "Baseline_Wander_Band_Power", "ECG_Dominant_Band_Power"]:
+        val08 = spec08_res[key]
+        val09 = spec09_res[key]
+        assert abs(val08 - val09) < 1e-4, f"Spectral mismatch for {key}: Exp08={val08} vs Exp09={val09}"
+
+
 if __name__ == "__main__":
     pytest.main(["-v", __file__])
+
