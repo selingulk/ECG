@@ -1,0 +1,8 @@
+record_id,patient_id,number_of_seizures,fs,ecg_channel,ecg_units,usable_phases,failed_phases,processing_notes
+sz01,,1,200.0,ECG,mV,4,0,Processed 1 seizure event(s) successfully.
+sz02,,2,200.0,ECG,mV,8,0,Processed 2 seizure event(s) successfully.
+sz03,,2,200.0,ECG,mV,8,0,Processed 2 seizure event(s) successfully.
+sz04,,1,200.0,ECG,mV,4,0,Processed 1 seizure event(s) successfully.
+sz05,,1,200.0,ECG,mV,4,0,Processed 1 seizure event(s) successfully.
+sz06,,2,200.0,ECG,mV,8,0,Processed 2 seizure event(s) successfully.
+sz07,,1,200.0,ECG,mV,4,0,Processed 1 seizure event(s) successfully.

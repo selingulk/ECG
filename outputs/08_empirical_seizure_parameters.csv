@@ -1,6 +1,6 @@
 Clinical_Class,Mean_HR_BPM,SDNN_ms,RMSSD_ms,EMG_Band_Power,Signal_Std,Detected_Peaks
-Interictal_Baseline,65.9,66.15,69.91,0.000852,0.19,131
-Preictal_Prediction,71.25,75.41,105.33,0.000943,0.1972,141
-Ictal_Seizure,111.63,81.83,79.0,0.003012,0.5194,216
-Postictal_Recovery,84.91,126.89,113.17,0.000699,0.3196,162
+Interictal_Baseline,69.55,64.38,76.43,0.002427,0.2867,690
+Preictal_Prediction,71.63,79.91,96.95,0.001865,0.2744,703
+Ictal_Seizure,103.82,88.95,93.61,0.003185,0.5033,1413
+Postictal_Recovery,89.76,100.44,104.29,0.001635,0.385,869
 Hard_Negative_Arrhythmia,112.83,206.97,269.16,0.000375,0.5177,100

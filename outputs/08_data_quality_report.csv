@@ -1,10 +1,42 @@
-dataset,record_id,seizure_id,phase,channel_name,original_sampling_rate_hz,window_duration_s,Detected_Peaks,Valid_RR_Count,NaN_Fraction,Clipping_Detected,Clipping_Fraction,Quality_OK,Quality_Notes
-szdb,sz01,sz01_sz1,Interictal_Baseline,ECG,200.0,60.0,71,70,0.0,False,0.000583,True,Quality satisfactory
-szdb,sz01,sz01_sz1,Preictal_Prediction,ECG,200.0,60.0,78,77,0.0,False,0.001417,True,Quality satisfactory
-szdb,sz01,sz01_sz1,Ictal_Seizure,ECG,200.0,60.0,111,110,0.0,False,0.000167,True,Quality satisfactory
-szdb,sz01,sz01_sz1,Postictal_Recovery,ECG,200.0,60.0,78,77,0.0,False,0.000333,True,Quality satisfactory
-szdb,sz04,sz04_sz1,Interictal_Baseline,ECG,200.0,60.0,60,59,0.0,False,0.00025,True,Quality satisfactory
-szdb,sz04,sz04_sz1,Preictal_Prediction,ECG,200.0,60.0,63,62,0.0,False,0.009,True,Quality satisfactory
-szdb,sz04,sz04_sz1,Ictal_Seizure,ECG,200.0,60.0,105,104,0.0,False,0.003083,True,Quality satisfactory
-szdb,sz04,sz04_sz1,Postictal_Recovery,ECG,200.0,60.0,84,83,0.0,False,0.000583,True,Quality satisfactory
-mitdb,203,none,Hard_Negative_Arrhythmia,MLII,360.0,60.0,100,99,0.0,False,9.3e-05,True,Quality satisfactory
+dataset,record_id,patient_id,seizure_id,phase,ecg_channel,fs,segment_duration_sec,Detected_Peaks,Valid_RR_Count,NaN_Fraction,Clipping_Detected,signal_valid,rhythm_valid,morphology_valid,spectral_valid,processing_status,quality_notes
+szdb,sz01,,sz01_sz1,Interictal_Baseline,ECG,200.0,60.0,71,70,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz01,,sz01_sz1,Preictal_Prediction,ECG,200.0,60.0,78,77,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz01,,sz01_sz1,Ictal_Seizure,ECG,200.0,96.0,185,184,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz01,,sz01_sz1,Postictal_Recovery,ECG,200.0,60.0,78,77,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz1,Interictal_Baseline,ECG,200.0,60.0,60,59,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz1,Preictal_Prediction,ECG,200.0,60.0,67,66,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz1,Ictal_Seizure,ECG,200.0,60.0,86,85,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz1,Postictal_Recovery,ECG,200.0,60.0,85,84,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz2,Interictal_Baseline,ECG,200.0,60.0,61,60,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz2,Preictal_Prediction,ECG,200.0,60.0,62,61,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz2,Ictal_Seizure,ECG,200.0,25.0,36,35,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz02,,sz02_sz2,Postictal_Recovery,ECG,200.0,60.0,86,85,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz1,Interictal_Baseline,ECG,200.0,60.0,65,64,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz1,Preictal_Prediction,ECG,200.0,60.0,65,64,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz1,Ictal_Seizure,ECG,200.0,108.0,168,167,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz1,Postictal_Recovery,ECG,200.0,60.0,99,98,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz2,Interictal_Baseline,ECG,200.0,60.0,67,66,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz2,Preictal_Prediction,ECG,200.0,60.0,67,66,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz2,Ictal_Seizure,ECG,200.0,110.0,224,223,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz03,,sz03_sz2,Postictal_Recovery,ECG,200.0,60.0,109,108,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz04,,sz04_sz1,Interictal_Baseline,ECG,200.0,60.0,60,59,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz04,,sz04_sz1,Preictal_Prediction,ECG,200.0,60.0,63,62,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz04,,sz04_sz1,Ictal_Seizure,ECG,200.0,105.0,179,178,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz04,,sz04_sz1,Postictal_Recovery,ECG,200.0,60.0,84,83,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz05,,sz05_sz1,Interictal_Baseline,ECG,200.0,60.0,90,89,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz05,,sz05_sz1,Preictal_Prediction,ECG,200.0,60.0,91,90,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz05,,sz05_sz1,Ictal_Seizure,ECG,200.0,83.0,162,161,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz05,,sz05_sz1,Postictal_Recovery,ECG,200.0,60.0,113,112,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz1,Interictal_Baseline,ECG,200.0,60.0,72,71,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz1,Preictal_Prediction,ECG,200.0,60.0,68,67,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz1,Ictal_Seizure,ECG,200.0,54.0,69,68,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz1,Postictal_Recovery,ECG,200.0,60.0,68,67,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz2,Interictal_Baseline,ECG,200.0,60.0,69,68,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz2,Preictal_Prediction,ECG,200.0,60.0,69,68,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz2,Ictal_Seizure,ECG,200.0,85.0,98,97,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz06,,sz06_sz2,Postictal_Recovery,ECG,200.0,60.0,68,67,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz07,,sz07_sz1,Interictal_Baseline,ECG,200.0,60.0,75,74,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz07,,sz07_sz1,Preictal_Prediction,ECG,200.0,60.0,73,72,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz07,,sz07_sz1,Ictal_Seizure,ECG,200.0,89.0,206,205,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+szdb,sz07,,sz07_sz1,Postictal_Recovery,ECG,200.0,60.0,79,78,0.0,False,True,True,True,True,SUCCESS,Signal quality satisfactory
+mitdb,203,mitdb_patient_203,none,Hard_Negative_Arrhythmia,MLII,360.0,60.0,100,99,0.0,False,True,True,True,True,SUCCESS,Cardiologist annotated hard-negative rhythm
